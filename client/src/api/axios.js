@@ -1,7 +1,7 @@
 // src/api/api.js
 import axios from "axios";
 
-const BASE_URL = import.meta.env.MODE==="development" ? "http://localhost:8080" : "/api"; // your backend
+const BASE_URL = import.meta.env.MODE==="development" ? "http://localhost:8080" : ""; // your backend
 
 // Axios instance
 const api = axios.create({
