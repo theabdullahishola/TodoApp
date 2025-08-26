@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/theabdullahishola/to-do/model"
@@ -78,15 +79,16 @@ func googleAuth(c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, gin.H{"message": "unauthorized"})
 		return
 	}
-	c.SetCookie(
-		"refresh_token",
-		refreshToken,
-		24*60*60,  // 1 day
-		"/",
-		"",        // current domain
-		true,      // Secure (HTTPS only, must be true in prod on Railway)
-		true,      // HttpOnly
-	)
+	http.SetCookie(c.Writer, &http.Cookie{
+		Name:     "refresh_token",
+		Value:    refreshToken,
+		MaxAge:   24 * 60 * 60,
+		Path:     "/",
+		Domain:   os.Getenv("domain"),
+		Secure:   true,
+		HttpOnly: true,
+		SameSite: http.SameSiteNoneMode, // 🔑 allow after Google redirect
+	})
 
 	c.JSON(http.StatusOK, gin.H{"accessToken": accessToken})
 }
