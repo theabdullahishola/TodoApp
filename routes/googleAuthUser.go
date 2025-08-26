@@ -87,7 +87,7 @@ func googleAuth(c *gin.Context) {
 		24*60*60,        // maxAge (1 days in seconds)
 		"/",             // path
 		"",              // domain ("" = current domain)
-		false,           // secure (true = only over HTTPS)
+		true,           // secure (true = only over HTTPS)
 		true,            // httpOnly (not accessible by JS)
 	)
 
