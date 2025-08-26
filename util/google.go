@@ -15,7 +15,7 @@ func InitGoogleOAuth() {
 	GoogleOAuthConfig = &oauth2.Config{
 		ClientID:     os.Getenv("GoogleID"),
 		ClientSecret: os.Getenv("GOOGLE_CLIENT_SECRET"),
-		RedirectURL:  "http://localhost:5173", // must match frontend
+		RedirectURL: os.Getenv("GOOGLE_REDIRECT_URL"), // must match frontend
 		Scopes: []string{
 			"https://www.googleapis.com/auth/userinfo.email",
 			"https://www.googleapis.com/auth/userinfo.profile",

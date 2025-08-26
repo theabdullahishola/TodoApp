@@ -10,7 +10,7 @@ function handleClick(){
 
     return(
         <>
-        <button onClick={handleClick}>LogOut</button>
+        <button onClick={handleClick} className='btn-logout'>LogOut</button>
         </>
 
     )

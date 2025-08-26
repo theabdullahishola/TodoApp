@@ -165,3 +165,10 @@ form button:hover {
   background-color: #a4aea5; /* Darker green on hover */
   color: rgb(21, 209, 124); /* Change text color on hover */
 }
+.btn-logout{
+  background-color: #2F4F4F;
+  color: aliceblue;
+  padding: 5px;
+  box-shadow: 0 0 0.2em #dfd9d9;
+  border-radius: 8px;
+}

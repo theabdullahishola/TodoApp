@@ -14,7 +14,7 @@ export default function Signup() {
   const googleLogin = useGoogleLogin({
     flow: "auth-code",   // or "auth-code" if you want to exchange later
     ux_mode: "popup",
-    redirect_uri: "http://localhost:5173",
+    redirect_uri: import.meta.env.VITE_GOOGLE_REDIRECT_URI,
     onSuccess: async (resp) => {
       try {
         // resp contains id_token now
