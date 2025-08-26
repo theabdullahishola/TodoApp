@@ -47,12 +47,12 @@ func login(c *gin.Context) {
 	http.SetCookie(c.Writer, &http.Cookie{
 		Name:     "refresh_token",
 		Value:    refreshToken,
-		MaxAge:   24 * 60 * 60,       // 1 day
+		MaxAge:   24 * 60 * 60, // 1 day
 		Path:     "/",
-		Domain:   "",                 // "" = current domain
-		Secure:   true,               // true in prod (HTTPS), false in local dev
+		Domain:   "",   // "" = current domain
+		Secure:   true, // true in prod (HTTPS), false in local dev
 		HttpOnly: true,
-		SameSite: http.SameSiteNoneMode, // 🔑 allow cross-site (frontend <> backend)
+		SameSite: http.SameSiteLaxMode, // 🔑 allow cross-site (frontend <> backend)
 	})
 	c.JSON(http.StatusOK, gin.H{
 		"accessToken": accessToken})

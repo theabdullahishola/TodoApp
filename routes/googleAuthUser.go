@@ -89,7 +89,7 @@ func googleAuth(c *gin.Context) {
 		Domain:   "",                 // "" = current domain
 		Secure:   true,               // true in prod (HTTPS), false in local dev
 		HttpOnly: true,
-		SameSite: http.SameSiteNoneMode, // 🔑 allow cross-site (frontend <> backend)
+		SameSite: http.SameSiteLaxMode, // 🔑 allow cross-site (frontend <> backend)
 	})
 
 	c.JSON(http.StatusOK, gin.H{"accessToken": accessToken})
