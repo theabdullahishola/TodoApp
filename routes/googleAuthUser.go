@@ -58,9 +58,6 @@ func googleAuth(c *gin.Context) {
 		return
 	}
 
-	// Step 3: Save/find user in DB (pseudo-code)
-	// user, _ := model.FindOrCreateGoogleUser(gUser)
-
 	user, err := model.CreateOrGetGoogleUser(gUser.Email, gUser.ID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to login with google"})
@@ -81,16 +78,15 @@ func googleAuth(c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, gin.H{"message": "unauthorized"})
 		return
 	}
-	http.SetCookie(c.Writer, &http.Cookie{
-		Name:     "refresh_token",
-		Value:    refreshToken,
-		MaxAge:   24 * 60 * 60,       // 1 day
-		Path:     "/",
-		Domain:   "",                 // "" = current domain
-		Secure:   true,               // true in prod (HTTPS), false in local dev
-		HttpOnly: true,
-		SameSite: http.SameSiteLaxMode, // 🔑 allow cross-site (frontend <> backend)
-	})
+	c.SetCookie(
+		"refresh_token",
+		refreshToken,
+		24*60*60,  // 1 day
+		"/",
+		"",        // current domain
+		true,      // Secure (HTTPS only, must be true in prod on Railway)
+		true,      // HttpOnly
+	)
 
 	c.JSON(http.StatusOK, gin.H{"accessToken": accessToken})
 }
