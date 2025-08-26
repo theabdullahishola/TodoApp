@@ -1,0 +1,38 @@
+# air.toml configuration file
+
+# Working directory
+root = "."
+tmp_dir = "tmp"
+
+[build]
+# The binary file that air will build
+bin = "tmp/main"
+
+# Command to build your app
+cmd = "go build -o ./tmp/main ."
+
+# Patterns to watch
+include_dir = ["."]
+exclude_dir = ["tmp", "vendor", "node_modules"]
+
+# File extensions to watch
+include_ext = ["go", "tpl", "tmpl", "html"]
+exclude_ext = ["swp"]
+
+# Delay before rebuild after a file change
+delay = 1000 # milliseconds
+
+# Stop running old binary before starting new one
+kill_old = true
+
+[log]
+# Show debug log
+color = true
+time = true
+
+[misc]
+# Send interrupt signal instead of kill
+clean_on_exit = true
+
+[proxy]
+enabled = false
