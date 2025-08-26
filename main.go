@@ -35,8 +35,15 @@ func main() {
 	if PORT_NUMBER == "" {
 		PORT_NUMBER = "8080"
 	}
+	
 	if os.Getenv("ENV") == "production" {
-		server.Static("/", "./client/dist")
+		// Serve static assets (e.g. JS, CSS)
+		server.Static("/assets", "./client/dist/assets")
+
+		// Serve index.html for all other non-API routes (React fallback)
+		server.NoRoute(func(c *gin.Context) {
+			c.File("./client/dist/index.html")
+		})
 	}
 	// server.Use(cors.New(cors.Config{
 	// 	AllowOrigins:     []string{"http://localhost:5173"}, // frontend origin
