@@ -13,52 +13,39 @@ import (
 )
 
 func main() {
+    if os.Getenv("ENV") != "production" {
+        if err := godotenv.Load(".env"); err != nil {
+            log.Fatal(err)
+        }
+    }
 
-	if os.Getenv("ENV") !="production" {
-		err := godotenv.Load(".env")
+    util.InitGoogleOAuth()
 
-	if err != nil {
-		log.Fatal(err)
-		return
-	}
-	}
-	
-	util.InitGoogleOAuth()
-	server := gin.Default()
-	MONGO_URI := os.Getenv("MONGO_URI")
-	if MONGO_URI == "" {
-		log.Fatal("MONGO_URI is not set in .env file")
-	}
-	db.ConnectDB(MONGO_URI)
-	PORT_NUMBER := os.Getenv("PORT")
+    server := gin.Default()
 
-	if PORT_NUMBER == "" {
-		PORT_NUMBER = "8080"
-	}
-	
-	if os.Getenv("ENV") == "production" {
-		// Serve static assets (e.g. JS, CSS)
-		server.Static("/assets", "./client/dist/assets")
+    MONGO_URI := os.Getenv("MONGO_URI")
+    if MONGO_URI == "" {
+        log.Fatal("MONGO_URI is not set")
+    }
+    db.ConnectDB(MONGO_URI)
+    defer db.Client.Disconnect(context.Background())
 
-		// Serve index.html for all other non-API routes (React fallback)
-		server.NoRoute(func(c *gin.Context) {
-			c.File("./client/dist/index.html")
-		})
-	}
-	// server.Use(cors.New(cors.Config{
-	// 	AllowOrigins:     []string{"http://localhost:5173"}, // frontend origin
-	// 	AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-	// 	AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"},
-	// 	ExposeHeaders:    []string{"Content-Length"},
-	// 	AllowCredentials: true, // allow cookies!
-	// 	MaxAge:           12 * time.Hour,
-	// }))
-	routes.RegisterRoutes(server)
-	err := server.Run(":" + PORT_NUMBER)
+    PORT_NUMBER := os.Getenv("PORT")
+    if PORT_NUMBER == "" {
+        PORT_NUMBER = "8080"
+    }
 
-	if err != nil {
-		log.Fatal(err)
-		return
-	}
-	defer db.Client.Disconnect(context.Background())
+    // Register all API routes first
+    routes.RegisterRoutes(server)
+
+    if os.Getenv("ENV") == "production" {
+        server.Static("/assets", "./client/dist/assets")
+        server.NoRoute(func(c *gin.Context) {
+            c.File("./client/dist/index.html")
+        })
+    }
+
+    if err := server.Run(":" + PORT_NUMBER); err != nil {
+        log.Fatal(err)
+    }
 }
