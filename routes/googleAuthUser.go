@@ -84,7 +84,6 @@ func googleAuth(c *gin.Context) {
 		Value:    refreshToken,
 		MaxAge:   24 * 60 * 60,
 		Path:     "/",
-		Domain:   os.Getenv("domain"),
 		Secure:   true,
 		HttpOnly: true,
 		SameSite: http.SameSiteNoneMode, // 🔑 allow after Google redirect
