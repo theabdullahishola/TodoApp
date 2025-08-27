@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/theabdullahishola/to-do/model"
@@ -86,6 +87,7 @@ func googleAuth(c *gin.Context) {
 		Secure:   true,
 		HttpOnly: true,
 		SameSite: http.SameSiteNoneMode, // 🔑 allow after Google redirect
+		Domain: os.Getenv("URL"),
 	})
 
 	c.JSON(http.StatusOK, gin.H{"accessToken": accessToken})
