@@ -4,6 +4,9 @@ import (
 	"context"
 	"log"
 	"os"
+	"time"
+
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"github.com/theabdullahishola/to-do/db"
@@ -33,15 +36,15 @@ func main() {
 	if PORT_NUMBER == "" {
 		PORT_NUMBER = "8080"
 	}
-
-	// server.Use(cors.New(cors.Config{
-	// 	AllowOrigins:     []string{"http://localhost:5173"}, // frontend URL
-	// 	AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-	// 	AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"},
-	// 	ExposeHeaders:    []string{"Content-Length"},
-	// 	AllowCredentials: true,
-	// 	MaxAge:           12 * time.Hour,
-	// }))
+	
+	server.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{os.Getenv("URL")}, // frontend URL
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		MaxAge:           12 * time.Hour,
+	}))
 	// Register all API routes first
 	routes.RegisterRoutes(server)
 
